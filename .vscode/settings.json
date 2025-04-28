@@ -1,0 +1,32 @@
+{
+    "files.associations": {
+        "*.h": "c",
+        "*.c": "c",
+        "*.inf": "ini",
+        "*.dsc": "ini",
+        "*.dec": "ini",
+        "*.fdf": "ini"
+    },
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
+    "C_Cpp.default.includePath": [
+        "${workspaceFolder}/**",
+        "${workspaceFolder}/../edk2/MdePkg/Include",
+        "${workspaceFolder}/../edk2/MdePkg/Include/X64",
+        "${workspaceFolder}/../edk2/MdeModulePkg/Include",
+        "${workspaceFolder}/../edk2/CryptoPkg/Include"
+    ],
+    "C_Cpp.default.defines": [
+        "DISABLE_NEW_DEPRECATED_INTERFACES",
+        "_UEFI"
+    ],
+    "C_Cpp.default.browse.path": [
+        "${workspaceFolder}",
+        "${workspaceFolder}/../edk2/MdePkg/Include",
+        "${workspaceFolder}/../edk2/MdePkg/Include/X64",
+        "${workspaceFolder}/../edk2/MdeModulePkg/Include",
+        "${workspaceFolder}/../edk2/CryptoPkg/Include"
+    ],
+    "C_Cpp.default.cStandard": "c11",
+    "C_Cpp.default.cppStandard": "c++17",
+}

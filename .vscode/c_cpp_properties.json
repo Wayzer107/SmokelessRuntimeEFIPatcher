@@ -1,0 +1,18 @@
+{
+    "configurations": [
+        {
+            "name": "EDK2",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/../edk2/MdePkg/Include",
+                "${workspaceFolder}/../edk2/MdePkg/Include/X64",
+                "${workspaceFolder}/../edk2/MdeModulePkg/Include",
+                "${workspaceFolder}/../edk2/CryptoPkg/Include"
+            ],
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c11",
+            "cppStandard": "c++17"
+        }
+    ],
+    "version": 4
+}

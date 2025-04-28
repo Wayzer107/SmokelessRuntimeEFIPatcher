@@ -1,47 +1,49 @@
 [Defines]
-	INF_VERSION                    = 0x00010006
 	BASE_NAME                      = SmokelessRuntimeEFIPatcher
-	FILE_GUID                      =  24ba59e6-8d34-4fe4-83a0-da8e478ecbfe
-	MODULE_TYPE                    = UEFI_APPLICATION
-	VERSION_STRING                 = 0.1
 	ENTRY_POINT                    = SREPEntry
+	FILE_GUID                      = 24ba59e6-8d34-4fe4-83a0-da8e478ecbfe
+	INF_VERSION                    = 0x00010006
+	MODULE_TYPE                    = UEFI_APPLICATION
+	UEFI_HII_RESOURCE_SECTION      = TRUE
+	VERSION_STRING                 = 0.1
 
-
-  UEFI_HII_RESOURCE_SECTION      = TRUE
 [Sources]
-	SmokelessRuntimeEFIPatcher.c
+	OpCode.c
+  SmokelessRuntimeEFIPatcher.c
   Utility.c
-  OpCode.c
+
 [Packages]
-	MdePkg/MdePkg.dec
+	CryptoPkg/CryptoPkg.dec
   MdeModulePkg/MdeModulePkg.dec
-  CryptoPkg/CryptoPkg.dec
+  MdePkg/MdePkg.dec
+
 [LibraryClasses]
-  UefiApplicationEntryPoint
-  UefiLib
+  BaseCryptLib
   BaseLib
-  HiiLib
-  MemoryAllocationLib
   BaseMemoryLib
   DebugLib
-  BaseCryptLib
-  PrintLib
-  UefiLib
   DevicePathLib
+  HiiLib
+  MemoryAllocationLib
+  PrintLib
+  UefiApplicationEntryPoint
+  UefiBootServicesTableLib
+  UefiLib
 
 [Protocols]
-  gEfiLoadedImageProtocolGuid            ## CONSUMES
-  gEfiSimpleFileSystemProtocolGuid              ## CONSUMES
-  gEfiLoadFileProtocolGuid                      ## CONSUMES
-  gEfiHiiConfigAccessProtocolGuid               ## CONSUMES
-  gEfiSerialIoProtocolGuid                      ## CONSUMES
-  gEfiDevicePathToTextProtocolGuid              ## CONSUMES
-  gEfiFirmwareVolume2ProtocolGuid
-  gEdkiiFormBrowserEx2ProtocolGuid     
-  gEdkiiFormBrowserExProtocolGuid
-  gEfiHiiPopupProtocolGuid
-  gEdkiiFormDisplayEngineProtocolGuid
+  gEdkiiFormBrowserEx2ProtocolGuid         ## CONSUMES
+  gEdkiiFormBrowserExProtocolGuid          ## CONSUMES
+  gEdkiiFormDisplayEngineProtocolGuid      ## CONSUMES
+  gEfiDevicePathToTextProtocolGuid         ## CONSUMES
+  gEfiFirmwareVolume2ProtocolGuid          ## CONSUMES
+  gEfiHiiConfigAccessProtocolGuid          ## CONSUMES
+  gEfiHiiPopupProtocolGuid                 ## CONSUMES
+  gEfiLoadedImageProtocolGuid              ## CONSUMES
+  gEfiLoadFileProtocolGuid                 ## CONSUMES
+  gEfiSerialIoProtocolGuid                 ## CONSUMES
+  gEfiSimpleFileSystemProtocolGuid         ## CONSUMES
+
 [Guids]
-  gEfiAcpiTableGuid
-  gEfiAcpi20TableGuid
-  gEfiDxeServicesTableGuid
+  gEfiAcpi20TableGuid                      ## SOMETIMES_CONSUMES
+  gEfiAcpiTableGuid                        ## SOMETIMES_CONSUMES
+  gEfiDxeServicesTableGuid                 ## CONSUMES

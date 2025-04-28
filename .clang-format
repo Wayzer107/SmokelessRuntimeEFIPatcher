@@ -1,0 +1,127 @@
+---
+# EDK II C Coding Standards Compliant Configuration
+# Reference: https://tianocore-docs.github.io/edk2-CCodingStandardsSpecification/draft/
+
+#------------------------------------------------------------------------------
+# Global Settings
+#------------------------------------------------------------------------------
+BasedOnStyle: LLVM               # Use LLVM as base style
+Language: 'Cpp'                  # Apply C++ language formatting rules
+DisableFormat: false
+
+#------------------------------------------------------------------------------
+# Basic Layout
+#------------------------------------------------------------------------------
+IndentWidth: 2                   # EDK II uses 2-space indentation
+TabWidth: 2                      # Match IndentWidth
+UseTab: 'Never'                  # EDK II prefers spaces over tabs
+ColumnLimit: 100                 # Max line length
+MaxEmptyLinesToKeep: 1           # Limit consecutive empty lines
+InsertNewlineAtEOF: true         # Always add a final newline
+KeepEmptyLinesAtEOF: false       # Remove multiple empty lines at EOF, ensure exactly one
+SeparateDefinitionBlocks: Always # Add empty lines between definition blocks
+KeepEmptyLinesAtTheStartOfBlocks: true   # Keep empty lines at the start of blocks
+
+#------------------------------------------------------------------------------
+# Alignment Options
+#------------------------------------------------------------------------------
+AlignAfterOpenBracket: AlwaysBreak
+AlignConsecutiveAssignments: false
+AlignConsecutiveDeclarations: false
+AlignConsecutiveMacros: true     # Align consecutive macro definitions
+AlignEscapedNewlines: Right
+AlignOperands: true              # Align operands of binary expressions
+AlignTrailingComments: 
+  Kind: Always
+  OverEmptyLines: 2
+SpacesBeforeTrailingComments: 1   # Number of spaces before trailing comments
+
+#------------------------------------------------------------------------------
+# Line Breaking
+#------------------------------------------------------------------------------
+AllowAllArgumentsOnNextLine: 'false'       # Arguments must respect ColumnLimit
+AllowAllParametersOfDeclarationOnNextLine: false
+BinPackParameters: false         # Don't bin-pack parameters
+BinPackArguments: false          # Don't bin-pack function call arguments
+
+# Penalties for line breaking behavior
+PenaltyBreakAssignment: 3
+PenaltyBreakBeforeFirstCallParameter: 19
+PenaltyBreakComment: 300
+PenaltyBreakFirstLessLess: 120
+PenaltyBreakString: 1000
+PenaltyExcessCharacter: 1000000
+PenaltyReturnTypeOnItsOwnLine: 60
+
+#------------------------------------------------------------------------------
+# Blocks, Braces and Control Statements
+#------------------------------------------------------------------------------
+BreakBeforeBraces: Custom        # Custom braces configuration for EDK2 style
+BraceWrapping:
+  AfterClass: true
+  AfterControlStatement: MultiLine
+  AfterEnum: true
+  AfterFunction: true
+  AfterNamespace: true
+  AfterObjCDeclaration: true
+  AfterStruct: true
+  AfterUnion: true
+  AfterExternBlock: false
+  BeforeCatch: true
+  BeforeElse: true
+  IndentBraces: false
+  SplitEmptyFunction: true
+  SplitEmptyRecord: true
+  SplitEmptyNamespace: true
+AllowShortBlocksOnASingleLine: 'false'    # No single line blocks
+AllowShortCaseLabelsOnASingleLine: 'false'  # No single line case labels
+AllowShortFunctionsOnASingleLine: None
+AllowShortIfStatementsOnASingleLine: 'false'  # No single line if statements
+IndentCaseLabels: false          # Don't indent case labels
+
+# Force empty lines around modifiers
+EmptyLineBeforeAccessModifier: LogicalBlock
+EmptyLineAfterAccessModifier: Never
+
+#------------------------------------------------------------------------------
+# Function Declarations and Calls
+#------------------------------------------------------------------------------
+AlwaysBreakAfterReturnType: All  # Always break after return type of functions
+AlwaysBreakBeforeMultilineStrings: 'false'  # Don't break before multiline strings
+AlwaysBreakTemplateDeclarations: Yes
+
+#------------------------------------------------------------------------------
+# Pointer and Reference Alignment
+#------------------------------------------------------------------------------
+DerivePointerAlignment: 'false'  # Don't derive pointer alignment
+PointerAlignment: Right          # int *foo - EDK II style
+
+#------------------------------------------------------------------------------
+# Include Directive Formatting
+#------------------------------------------------------------------------------
+IncludeBlocks: Preserve          # Preserve include blocks
+SortIncludes: false              # Don't sort include blocks
+# Enforce separation between include blocks and code
+IncludeCategories:
+  - Regex: '.*'
+    Priority: 1
+    SortPriority: 0
+    CaseSensitive: false
+
+#------------------------------------------------------------------------------
+# Spacing
+#------------------------------------------------------------------------------
+SpaceAfterCStyleCast: false      # No space after C-style cast
+SpaceBeforeAssignmentOperators: true  # Space before assignment operators
+SpaceBeforeParens: ControlStatements  # Space before params in control statements
+SpaceInEmptyParentheses: false   # No spaces in empty parentheses
+SpacesInSquareBrackets: false    # No spaces in square brackets
+SpacesInParentheses: false       # No spaces in parentheses
+SpacesInCStyleCastParentheses: false  # No spaces in C-style cast parentheses
+SpaceAfterTemplateKeyword: true  # Space after template keyword
+
+#------------------------------------------------------------------------------
+# Other
+#------------------------------------------------------------------------------
+Cpp11BracedListStyle: true       # Use C++11 braced list style
+ReflowComments: true             # Reflow comments
