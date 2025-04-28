@@ -1,50 +1,28 @@
 # SmokelessRuntimeEFIPatcher
 
-# This Tool Will not be Longer Mantained
-At least for now, I will not make any update to this
+SmokelessRuntimeEFIPatcher (SREP) enables patching and injection of EFI modules at runtime. SREP serves as an alternative to SPI flashing, allowing BIOS/UEFI modifications without physical hardware access.
 
+SREP capabilities include:
+- Loading and patching EFI modules from the filesystem
+- Loading modules from firmware volumes
+- Executing pattern-based patches
+- Launching EFI applications
 
+SREP reads a configuration file (`SREP_Config.cfg`) from a USB drive and executes the specified operations. Users can create custom configurations to unlock hidden BIOS options, modify firmware behavior, or make other EFI-level changes without reflashing the BIOS chip.
 
-# These Are tool From "The Vault", that I decided to upload, so expect not fully polished product, or very slow Fixes if any
+See the usage instructions below for details on creating configuration files, supported operations, and build instructions.
 
-# This is not a request form
-Plese don't open issue not strictly related with the tool.
-Request for bios unlock are not related to the tool,
-for that you can try to ask on the discord server( a bit of effort from you side is required)
+## Getting Started
 
-Even if the tool is free, my time is not, so don't expect that I make a patch from scratch for your bios, without you putting some effort in it.
+1. Disable Secure Boot and enable USB booting in your BIOS/UEFI settings before proceeding.
+2. Create a bootable USB drive with a GPT partition scheme and FAT32 EFI System Partition
+3. Copy the SREP application to `EFI/BOOT/BOOTX64.EFI` on the USB drive
+4. Create a `SREP_Config.cfg` file in the root directory of the USB drive
+5. Boot your system from the USB drive (may require pressing F12, ESC, or another key during startup to access boot menu)
 
-# Discaimer
-**Use this at your own risk,I won’t be responsible for any damage.**
+## Configuration File Format
 
-Also the code quality and the parsing engine are not that great, but were the best I could come to.
-
-
-## Already baked config
-https://github.com/SmokelessCPUv2/SREP-Community-Patches
-
-# What is this
-This is a simple tool to patch and Inject/Patch EFI modules at runtime, I developed this as I wasn't confortable with SPI flashing, as is not boring and require opening the laptop for every small change, as with AMD you can't flash from the OS a new BIOS, if is not signed...
-
-# Why this exist
-The real reason why this exist, is that with an update Lenovo removed the Unlock BackDoor [LenovoH2O-Unlocker](https://github.com/SmokelessCPUv2/LenovoH2O-Unlocker), so after an update I couldn't change some adv option check [Unlocking Lenovo H2O Bios](#Lenovo-BIOS-Unlock) I decided to develop a new way to do it....
-
-
-# How this work
-When the EFI App is booted up, it look for a file Called *SREP_Config.cfg*, containing a list of command to execute, then will execute them
-
-
-# How to use it
-* Download the Latest zip, from the [Release Page](https://github.com/SmokelessCPUv2/SmokelessRuntimeEFIPatcher/releases/latest)
-
-* extract in a USB, such that exist a Folder Called EFI in the USB Root,
-* Create a SREP_Config.cfg and place in the root of the USB
-* boot from the USB
-* ??
-* Profit
-
-# SREP_Config Structure
-The Config file can containg muliple batch of operation, the syntax is, 
+The configuration file consists of operation blocks. Each block starts with `Op` followed by an operation name and ends with `End`. Operations can have multiple arguments on separate lines:
 
     Op OpName1
         Argument 1
@@ -62,50 +40,39 @@ The Config file can containg muliple batch of operation, the syntax is,
         Argument n
     End
 
+### Supported Operations
 
-# Implemented Operiation
+SREP supports the following operations:
 
-## LoadFromFS
-Load a EFI File in memory from a EFI partition, set as target
-### Arguments
-    * FileName : The Filename to load
+| Operation  | Arguments                                              |
+| ---------- | ------------------------------------------------------ |
+| LoadFromFS | `FileName`                                             |
+| LoadFromFV | `SectionName`                                          |
+| Loaded     | `Name`                                                 |
+| Patch      | `Pattern`, `Offset`, `RelNegOffset`, or `RelPosOffset` |
+| Exec       | None                                                   |
 
+Description of operations:
+- **LoadFromFS**: Loads an EFI file from the filesystem into memory and sets it as the current target for subsequent operations.
+- **LoadFromFV**: Loads an EFI module from the Firmware Volume (BIOS image) into memory and sets it as the current target.
+- **Loaded**: Targets an already loaded EFI module in memory for subsequent operations.
+- **Patch**: Applies modifications to the currently targeted module in memory.
+  - `Pattern`: Finds a byte pattern and replaces it with another pattern
+  - `Offset`: Specifies an absolute offset from the start of the file and the bytes to replace
+  - `RelNegOffset`/`RelPosOffset`: Specifies a negative/positive offset relative to the previous patch operation and the bytes to replace
+- **Exec**: Executes the currently targeted EFI module.
 
-## LoadFromFV
-Load a EFI File in memory from the FV(Firmware Volume)/The BIOS image, set as target
-### Arguments
-    * SectionName : The Section to load
+## Examples
 
-## Loaded
-Target an already loaded Module
-### Arguments
-    * Name : The Name of the Loaded App to target
-
-## Patch
-Patch the previus loaded target 
-### Arguments
-    * Pattern : provide the Find and Replace a Patterns
-    * Offset : Provide and offset from the File start, and then the Byte to replace here
-    * RelNegOffset/RelPosOffset : negative/positive offset from previus Patch operation, and then the Byte to replace here
-## Exec
-Execute the Previus loaded Module
-
-# To be Implemted
-
-    [ ] Uninstall Protocol
-    [ ] Lzma compressed object (very common on AMI BIOS)
-
-# Example
-This is an Example of Loading a simple EFI, and executing it:
+### Basic Example: Load and Execute an EFI Application
 
     Op LoadFromFS APP.efi
     Op Exec
     End
 
-This is an Example of Loading a simple EFI, replacing by pattern,and executing it
+### Pattern Replacement Example
 
-Find and replace AABBCCDDEEFF with AABBCCDDEEEE,
-find and replace AABBCCDDAABB with AABBCCDDAAAA:
+This example loads an EFI file, performs two pattern replacements, and executes it:
 
     Op LoadFromFS
     APP.efi
@@ -120,7 +87,7 @@ find and replace AABBCCDDAABB with AABBCCDDAAAA:
     Op Exec
     End
 
-This is an Example of using relative pattern
+### Relative Offset Example
 
 Find the pattern AABBCCDDEEFF (replace with AABBCCDDEEFF, as we want it's own start address), then write AABBCCDDAAAA, at +50 from the pattern start
 
@@ -137,139 +104,52 @@ Find the pattern AABBCCDDEEFF (replace with AABBCCDDEEFF, as we want it's own st
     Op Exec
     End
 
+## Build Instructions
 
-## Lenovo-BIOS-Unlock
-Now a real example on how to use it to patch a Lenovo Legion Bios to Unlock the Advanced menu:
+This project is built and tested with Ubuntu 24.04 LTS. While it may work with other Linux distributions or versions, Ubuntu 24.04 LTS provides the most reliable environment for building the application with all dependencies properly resolved.
 
-The Target H2O, is very simple in the regard on which form is shown...
+1. Install required dependencies:
+   ```bash
+   sudo apt install build-essential nasm uuid-dev
+   ```
 
-in the H2OFormBrowserDxe there is a simple array of struct:
+2. If Python is not found, create a symlink:
+   ```bash
+   sudo update-alternatives --install /usr/bin/python python /usr/bin/python3 1
+   ```
 
-     struct Form
-    {
-        GUID FormGUID;
-        uint32_t isShown;
-    }
+3. Clone the EDK2 repository:
+   ```bash
+   git clone https://github.com/tianocore/edk2.git
+   ```
 
-    struct Form FormList[NO_OF_FORM];
+4. Clone this repository inside the edk2 directory:
+   ```bash
+   cd edk2
+   git clone https://github.com/TommyLau/SmokelessRuntimeEFIPatcher.git
+   ```
 
-The previus cE! backdoor, was very simple, looked like this:
+5. Build the EDK2 BaseTools:
+   ```bash
+   make -C BaseTools
+   ```
 
-    if(gRS->GetVariable("cE!".....))
-        for(int i=0;i<NO_OF_FORM;i++)
-        {
-            FormList[i].isShown=1;
-        }
-if the Variable didn't existed default isShow was used...
+6. Set up the EDK2 environment:
+   ```bash
+   source edksetup.sh
+   ```
 
-With this tool we can manually set the isShow Flag so we can replicate that behavoir...
+7. Build the project:
+   ```bash
+   build -b RELEASE -t GCC5 -p SmokelessRuntimeEFIPatcher/SmokelessRuntimeEFIPatcher.dsc -a X64 -s
+   ```
 
-The H2OFormBrowserDxe, is already loaded when we are able to execute SREP, so we can use the Loaded OP....
+8. The compiled EFI application will be available at:
+   ```
+   Build/SmokelessRuntimeEFIPatcher/RELEASE_GCC5/X64/SmokelessRuntimeEFIPatcher.efi
+   ```
 
-Let's say that we want to show the CBS Menu , it's guid is {B04535E3-3004-4946-9EB7-149428983053}, so it's hex representation is
- 
-    E33545B0043046499EB7149428983053
- 
- given that is disabled, the complete Form Struct in memory will be 
- 
-    E33545B0043046499EB714942898305300000000
+9. Copy the EFI file to a USB drive in the `EFI/BOOT` directory as `BOOTX64.EFI` and create your SREP_Config.cfg file in the root of the USB drive.
 
- as we appended the 4 byte uint32_t of value 0;
-
- we want to replace this with the 1, the little endian version of a uint32_t is
- 
-    01 00 00 00
-
-so the replace string is
-
-     E33545B0043046499EB714942898305301000000
-
-
-So putting all toghether the SREP_Config.cfg file look like
-
-
-    Op Loaded
-    H2OFormBrowserDxe
-    Op Patch
-    Pattern
-    E33545B0043046499EB714942898305300000000
-    E33545B0043046499EB714942898305301000000
-    Op End
-
-Now we have patched the H2OFormBrowserDxe, but the Bios UI will be not loaded as we booted from a USB, but we can force it to load with
-
-    Op LoadFromFV
-    SetupUtilityApp
-    Op Exec
-
-
-So the Finall SREP_Config.cfg is:
-
-    Op Loaded
-    H2OFormBrowserDxe
-    Op Patch
-    Pattern
-    E33545B0043046499EB714942898305300000000
-    E33545B0043046499EB714942898305301000000
-    Op End
-
-    Op LoadFromFV
-    SetupUtilityApp
-    Op Exec
-
-
-
-*Note You can't show the AOD menu with this, as it is not even loaded on non HX, cpu, you can force to load, Patching also AoDSetupDxe, but that's a topic for another day.*
-
-
-You could do the same to show the PBS menu and the Advanced Menu on intel one, if you are lazy you can use the combined one AMD/Intel provided here(I might have forgot to unlock something tbh):
-
-    Op Loaded
-    H2OFormBrowserDxe
-    Op Patch
-    Pattern
-    59B963B8C60E334099C18FD89F04022200000000
-    59B963B8C60E334099C18FD89F04022201000000
-    Op Patch
-    Pattern
-    E33545B0043046499EB714942898305300000000
-    E33545B0043046499EB714942898305301000000
-    Op Patch
-    Pattern
-    732871A65F92C64690B4A40F86A0917B00000000
-    732871A65F92C64690B4A40F86A0917B01000000
-    Op Patch
-    Pattern
-    9E76D4C6487F2A4D98E987ADCCF35CCC00000000
-    9E76D4C6487F2A4D98E987ADCCF35CCC01000000
-    Op End
-
-    Op LoadFromFV
-    SetupUtilityApp
-    Op Exec
-
-## Lagon Intel 2022 Config
-
-    Op Loaded
-    H2OFormBrowserDxe
-    Op Patch
-    Pattern
-    49D592C3EB27464F8A119F5DF55A9C8B00000000
-    49D592C3EB27464F8A119F5DF55A9C8B01000000
-    Op Patch
-    Pattern
-    1AB0E0C17E60754BB8BB0631ECFAACF200000000
-    1AB0E0C17E60754BB8BB0631ECFAACF201000000
-    Op Patch
-    Pattern
-    9E76D4C6487F2A4D98E987ADCCF35CCC00000000
-    9E76D4C6487F2A4D98E987ADCCF35CCC01000000
-    Op Patch
-    Pattern
-    732871A65F92C64690B4A40F86A0917B00000000
-    732871A65F92C64690B4A40F86A0917B01000000
-    Op End
-
-    Op LoadFromFV
-    SetupUtilityApp
-    Op Exec
+## Credits
+Originally created by [SmokelessCPUv2](https://github.com/SmokelessCPUv2/)

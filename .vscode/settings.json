@@ -11,10 +11,10 @@
     "editor.formatOnPaste": true,
     "C_Cpp.default.includePath": [
         "${workspaceFolder}/**",
-        "${workspaceFolder}/../edk2/MdePkg/Include",
-        "${workspaceFolder}/../edk2/MdePkg/Include/X64",
-        "${workspaceFolder}/../edk2/MdeModulePkg/Include",
-        "${workspaceFolder}/../edk2/CryptoPkg/Include"
+        "${workspaceFolder}/../MdePkg/Include",
+        "${workspaceFolder}/../MdePkg/Include/X64",
+        "${workspaceFolder}/../MdeModulePkg/Include",
+        "${workspaceFolder}/../CryptoPkg/Include"
     ],
     "C_Cpp.default.defines": [
         "DISABLE_NEW_DEPRECATED_INTERFACES",
@@ -22,10 +22,10 @@
     ],
     "C_Cpp.default.browse.path": [
         "${workspaceFolder}",
-        "${workspaceFolder}/../edk2/MdePkg/Include",
-        "${workspaceFolder}/../edk2/MdePkg/Include/X64",
-        "${workspaceFolder}/../edk2/MdeModulePkg/Include",
-        "${workspaceFolder}/../edk2/CryptoPkg/Include"
+        "${workspaceFolder}/../MdePkg/Include",
+        "${workspaceFolder}/../MdePkg/Include/X64",
+        "${workspaceFolder}/../MdeModulePkg/Include",
+        "${workspaceFolder}/../CryptoPkg/Include"
     ],
     "C_Cpp.default.cStandard": "c11",
     "C_Cpp.default.cppStandard": "c++17",

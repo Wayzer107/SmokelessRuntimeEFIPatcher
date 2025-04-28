@@ -4,12 +4,12 @@
             "name": "EDK2",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/../edk2/MdePkg/Include",
-                "${workspaceFolder}/../edk2/MdePkg/Include/X64",
-                "${workspaceFolder}/../edk2/MdeModulePkg/Include",
-                "${workspaceFolder}/../edk2/CryptoPkg/Include"
+                "${workspaceFolder}/../MdePkg/Include",
+                "${workspaceFolder}/../MdePkg/Include/X64",
+                "${workspaceFolder}/../MdeModulePkg/Include",
+                "${workspaceFolder}/../CryptoPkg/Include"
             ],
-            "compilerPath": "/usr/bin/clang",
+            "compilerPath": "/usr/bin/gcc",
             "cStandard": "c11",
             "cppStandard": "c++17"
         }
